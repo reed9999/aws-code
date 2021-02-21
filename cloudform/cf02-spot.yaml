@@ -37,6 +37,20 @@ Parameters:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the EC2 Instances
     Type: AWS::EC2::KeyPair::KeyName
 Resources:
+  vpc:
+    Properties:
+      CidrBlock:
+        Fn::FindInMap:
+        - CidrMappings
+        - vpc
+        - CIDR
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+    Type: AWS::EC2::VPC
+  internetGateway:
+    DependsOn:
+    - vpc
+    Type: AWS::EC2::InternetGateway
   attachGateway:
     DependsOn:
     - vpc
@@ -47,10 +61,26 @@ Resources:
       VpcId:
         Ref: vpc
     Type: AWS::EC2::VPCGatewayAttachment
-  internetGateway:
-    DependsOn:
-    - vpc
-    Type: AWS::EC2::InternetGateway
+  publicSubnet1:
+    DependsOn: attachGateway
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+        - 0
+        - Fn::GetAZs:
+            Ref: AWS::Region
+      CidrBlock:
+        Fn::FindInMap:
+        - CidrMappings
+        - public-subnet-1
+        - CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: Public Subnet 1
+      VpcId:
+        Ref: vpc
+    Type: AWS::EC2::Subnet
   launchTemplate:
     DependsOn:
     - publicSubnet1
@@ -77,6 +107,29 @@ Resources:
           - Key: Name
             Value: CFN EC2 Spot Instance
     Type: AWS::EC2::LaunchTemplate
+  spotInstance:
+    DependsOn:
+    - launchTemplate
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId:
+          Ref: launchTemplate
+        Version: 1
+    Type: AWS::EC2::Instance
+
+# The remainder are demos of other VPC- and routing-related setup, not strictly 
+# necessary for our spot instance.
+  publicRouteTable:
+    DependsOn:
+    - vpc
+    - attachGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: Public Route Table
+      VpcId:
+        Ref: vpc
+    Type: AWS::EC2::RouteTable
   publicRoute:
     DependsOn:
     - publicRouteTable
@@ -89,37 +142,6 @@ Resources:
       RouteTableId:
         Ref: publicRouteTable
     Type: AWS::EC2::Route
-  publicRouteTable:
-    DependsOn:
-    - vpc
-    - attachGateway
-    Properties:
-      Tags:
-      - Key: Name
-        Value: Public Route Table
-      VpcId:
-        Ref: vpc
-    Type: AWS::EC2::RouteTable
-  publicSubnet1:
-    DependsOn: attachGateway
-    Properties:
-      AvailabilityZone:
-        Fn::Select:
-        - 0
-        - Fn::GetAZs:
-            Ref: AWS::Region
-      CidrBlock:
-        Fn::FindInMap:
-        - CidrMappings
-        - public-subnet-1
-        - CIDR
-      MapPublicIpOnLaunch: true
-      Tags:
-      - Key: Name
-        Value: Public Subnet 1
-      VpcId:
-        Ref: vpc
-    Type: AWS::EC2::Subnet
   publicSubnet1RouteTableAssociation:
     DependsOn:
     - publicRouteTable
@@ -162,23 +184,5 @@ Resources:
       SubnetId:
         Ref: publicSubnet2
     Type: AWS::EC2::SubnetRouteTableAssociation
-  spotInstance:
-    DependsOn:
-    - launchTemplate
-    Properties:
-      LaunchTemplate:
-        LaunchTemplateId:
-          Ref: launchTemplate
-        Version: 1
-    Type: AWS::EC2::Instance
-  vpc:
-    Properties:
-      CidrBlock:
-        Fn::FindInMap:
-        - CidrMappings
-        - vpc
-        - CIDR
-      EnableDnsHostnames: true
-      EnableDnsSupport: true
-    Type: AWS::EC2::VPC
+
 
