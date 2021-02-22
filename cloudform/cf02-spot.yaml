@@ -12,8 +12,12 @@ Mappings:
     vpc:
       CIDR: 10.0.0.0/16
   amazonLinuxAmi:
+    Global:
+      searchTerms: Amazon Linux AMI 2017.09.1.20180115 x86_64 HVM GP2
     us-east-1:
       AMI: ami-97785bed
+    us-east-2:
+      AMI: ami-f63b1193
 Metadata:
   Author:
     Description: Chad Schmutzer <schmutze@amazon.com>
