@@ -1,4 +1,5 @@
 # Tutorial from https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/GettingStarted.Walkthrough.html
+# Key pair might be AWS Key Pair or MainKeyPair (both Oregon). If neither works, try creating a new one.
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'AWS CloudFormation Sample Template WordPress_Single_Instance: WordPress
   is web software you can use to create a beautiful website or blog. This template
