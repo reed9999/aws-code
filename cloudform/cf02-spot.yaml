@@ -185,4 +185,3 @@ Resources:
         Ref: publicSubnet2
     Type: AWS::EC2::SubnetRouteTableAssociation
 
-
