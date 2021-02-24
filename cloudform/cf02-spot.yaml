@@ -12,12 +12,22 @@ Mappings:
     vpc:
       CIDR: 10.0.0.0/16
   amazonLinuxAmi:
+    # Originally was c3.large for all of them.        
+
     Global:
       searchTerms: Amazon Linux AMI 2017.09.1.20180115 x86_64 HVM GP2
     us-east-1:
+      InstanceType: t2.small
       AMI: ami-97785bed
     us-east-2:
+      InstanceType: t2.small
       AMI: ami-f63b1193
+    af-south-1:
+      # Cape Town does not have a matching AMI, so I picked one that seems sort of similar. 
+      # However this doesn't work, either because of the AIM or because the instance type isn't available, not 
+      # sure which.
+      InstanceType: c3.large
+      AMI: ami-03cba6d73dc8e7e48
 Metadata:
   Author:
     Description: Chad Schmutzer <schmutze@amazon.com>
