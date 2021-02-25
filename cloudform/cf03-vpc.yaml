@@ -1,0 +1,32 @@
+# Philip's first attempt to concoct a CloudFormation template from scratch.
+# This represents the sort of practice I was doing to learn about VPCs -- 
+# create an extra one here or there, create some public/private subnets, etc.
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: First attempt at creating VPCs with my own template.
+Metadata:
+  Author:
+    Description: Philip J. Reed <reed9999@uw.edu>
+# Taken from the tutorial example in AWS doc by Chad Schmutzer <schmutze@amazon.com>
+Mappings:
+  CidrMappings:
+    public-subnet-1:
+      CIDR: 10.0.1.0/24
+    public-subnet-2:
+      CIDR: 10.0.2.0/24
+    vpc:
+      CIDR: 10.0.0.0/16
+Resources:
+  vpc:
+    Properties:
+      CidrBlock:
+    #   start by being direct.... but then use the mappings.
+        10.0.0.0/16
+    #     Fn::FindInMap:
+    #     - CidrMappings
+    #     - vpc
+    #     - CIDR
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+    Type: AWS::EC2::VPC
+    
