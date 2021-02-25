@@ -12,13 +12,13 @@ Mappings:
     vpc:
       CIDR: 10.0.0.0/16
   amazonLinuxAmi:
-    # Originally was c3.large for all of them.        
-
+    # Originally was c3.large for all of them.
+    # InstanceType isn't connected to the template below, just yet, and 
+    # is here only for reference for the moment.
     Global:
       searchTerms: Amazon Linux AMI 2017.09.1.20180115 x86_64 HVM GP2
     us-east-1:
       InstanceType: t2.small
-      AMI: ami-97785bed
     us-east-2:
       InstanceType: t2.small
       AMI: ami-f63b1193
@@ -26,8 +26,8 @@ Mappings:
       # Cape Town does not have a matching AMI, so I picked one that seems sort of similar. 
       # However this doesn't work, either because of the AIM or because the instance type isn't available, not 
       # sure which.
-      InstanceType: c3.large
-      AMI: ami-03cba6d73dc8e7e48
+      InstanceType: t3.large
+      AMI: ami-0b4a93eff849f20ca
 Metadata:
   Author:
     Description: Chad Schmutzer <schmutze@amazon.com>
@@ -108,6 +108,7 @@ Resources:
         InstanceMarketOptions:
           MarketType: spot
         InstanceType: t2.small
+        # InstanceType: t3.large  # can be created manually as spot on af-south1
         # InstanceType: c3.large
         KeyName:
           Ref: keyName
