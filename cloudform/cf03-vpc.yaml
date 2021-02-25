@@ -14,19 +14,37 @@ Mappings:
       CIDR: 10.0.1.0/24
     public-subnet-2:
       CIDR: 10.0.2.0/24
-    vpc:
-      CIDR: 10.0.0.0/16
+    vpc1:
+      CIDR: 10.0.0.0/17
+    vpc2:
+      CIDR: 10.0.128.0/17
 Resources:
-  vpc:
+  vpc01:
     Properties:
       CidrBlock:
-    #   start by being direct.... but then use the mappings.
-        10.0.0.0/16
-    #     Fn::FindInMap:
-    #     - CidrMappings
-    #     - vpc
-    #     - CIDR
+        # 10.0.0.0/16
+        Fn::FindInMap:
+        - CidrMappings
+        - vpc1
+        - CIDR
       EnableDnsHostnames: true
       EnableDnsSupport: true
+      Tags:
+      - Key: Name
+        Value: Philip VPC 01
     Type: AWS::EC2::VPC
-    
+  vpc02:
+    Properties:
+      CidrBlock:
+        # 10.0.0.0/16
+        Fn::FindInMap:
+        - CidrMappings
+        - vpc2
+        - CIDR
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+      - Key: Name
+        Value: Philip VPC 02
+    Type: AWS::EC2::VPC
+        
