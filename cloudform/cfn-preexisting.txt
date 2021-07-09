@@ -1,0 +1,63 @@
+STACKS	2021-02-24T00:39:45.747Z			False	arn:aws:cloudformation:us-west-2:226724366601:stack/aws-cloud9-env02-639d2b0e46264a268bebe389fec9a4ed/cac29cd0-7638-11eb-8805-0a4b574888d3	aws-cloud9-env02-639d2b0e46264a268bebe389fec9a4ed	CREATE_COMPLETE	
+DRIFTINFORMATION	NOT_CHECKED
+TAGS	aws:cloud9:environment	639d2b0e46264a268bebe389fec9a4ed
+TAGS	aws:cloud9:owner	AIDAIVCSXYJQNJNHGAIBM
+STACKS	2021-02-16T15:56:01.650Z			False	arn:aws:cloudformation:us-west-2:226724366601:stack/aws-cloud9-env01-44c39b16401c4a689fe2a0187289bd80/77989060-706f-11eb-808c-021e49679a0b	aws-cloud9-env01-44c39b16401c4a689fe2a0187289bd80	CREATE_COMPLETE	
+DRIFTINFORMATION	NOT_CHECKED
+TAGS	aws:cloud9:environment	44c39b16401c4a689fe2a0187289bd80
+TAGS	aws:cloud9:owner	AIDAIVCSXYJQNJNHGAIBM
+STACKS	2018-08-08T21:44:54.305Z		Create instances ready for CodeDeploy: Create up to 3 Amazon EC2 instances with an associated instance profile and install the AWS CodeDeploy Agent. **WARNING** This template creates one or more Amazon EC2 instances. You will be billed for the AWS resources used if you create a stack from this template.	False	arn:aws:cloudformation:us-west-2:226724366601:stack/CodeDeploySampleStack-gg48in/493999f0-9b54-11e8-b824-503aca41a08d	CodeDeploySampleStack-gg48in	CREATE_COMPLETE	
+CAPABILITIES	CAPABILITY_IAM
+DRIFTINFORMATION	NOT_CHECKED
+OUTPUTS	CodeDeployTrustRoleARN	arn:aws:iam::226724366601:role/CodeDeploySampleStack-gg48in-CodeDeployTrustRole-1NRCG37MJJ1OQ
+PARAMETERS	OperatingSystem	Linux
+PARAMETERS	KeyPairName	MainKeyPair
+PARAMETERS	InstanceCount	3
+PARAMETERS	SSHLocation	0.0.0.0/0
+PARAMETERS	TagKey	Name
+PARAMETERS	TagValue	CodeDeployDemo
+PARAMETERS	InstanceType	t1.micro
+STACKS	2018-08-07T21:19:39.069Z		Create instances ready for CodeDeploy: Create up to 3 Amazon EC2 instances with an associated instance profile and install the AWS CodeDeploy Agent. **WARNING** This template creates one or more Amazon EC2 instances. You will be billed for the AWS resources used if you create a stack from this template.	False	arn:aws:cloudformation:us-west-2:226724366601:stack/CodeDeploySampleStack-m3dc6/97a97dd0-9a87-11e8-a228-503ac93168c5	CodeDeploySampleStack-m3dc6	CREATE_COMPLETE	
+CAPABILITIES	CAPABILITY_IAM
+DRIFTINFORMATION	NOT_CHECKED
+OUTPUTS	CodeDeployTrustRoleARN	arn:aws:iam::226724366601:role/CodeDeploySampleStack-m3dc6-CodeDeployTrustRole-I74UD55R00X7
+PARAMETERS	OperatingSystem	Linux
+PARAMETERS	KeyPairName	SecondKeyPair
+PARAMETERS	InstanceCount	3
+PARAMETERS	SSHLocation	0.0.0.0/0
+PARAMETERS	TagKey	Name
+PARAMETERS	TagValue	CodeDeployDemo
+PARAMETERS	InstanceType	t1.micro
+STACKS	2018-08-07T20:57:25.708Z	2018-08-07T20:59:56.979Z	Create instances ready for CodeDeploy: Create up to 3 Amazon EC2 instances with an associated instance profile and install the AWS CodeDeploy Agent. **WARNING** This template creates one or more Amazon EC2 instances. You will be billed for the AWS resources used if you create a stack from this template.	False	arn:aws:cloudformation:us-west-2:226724366601:stack/CodeDeploySampleStack-ojf4r/7ceb0de0-9a84-11e8-8af0-0206b4669a7e	CodeDeploySampleStack-ojf4r	ROLLBACK_COMPLETE	
+CAPABILITIES	CAPABILITY_IAM
+DRIFTINFORMATION	NOT_CHECKED
+PARAMETERS	OperatingSystem	Linux
+PARAMETERS	KeyPairName	SecondKeyPair
+PARAMETERS	InstanceCount	3
+PARAMETERS	SSHLocation	0.0.0.0/0
+PARAMETERS	TagKey	Name
+PARAMETERS	TagValue	CodeDeployDemo
+PARAMETERS	InstanceType	t1.micro
+STACKS	2018-08-06T21:19:38.599Z		Create instances ready for CodeDeploy: Create up to 3 Amazon EC2 instances with an associated instance profile and install the AWS CodeDeploy Agent. **WARNING** This template creates one or more Amazon EC2 instances. You will be billed for the AWS resources used if you create a stack from this template.	False	arn:aws:cloudformation:us-west-2:226724366601:stack/CodeDeploySampleStack-ebbawr/6cf8a2b0-99be-11e8-8d5a-0a97e291c068	CodeDeploySampleStack-ebbawr	CREATE_COMPLETE	
+CAPABILITIES	CAPABILITY_IAM
+DRIFTINFORMATION	NOT_CHECKED
+OUTPUTS	CodeDeployTrustRoleARN	arn:aws:iam::226724366601:role/CodeDeploySampleStack-ebbawr-CodeDeployTrustRole-WDJI9MD3SOGY
+PARAMETERS	OperatingSystem	Linux
+PARAMETERS	KeyPairName	AWS Key Pair
+PARAMETERS	InstanceCount	3
+PARAMETERS	SSHLocation	0.0.0.0/0
+PARAMETERS	TagKey	Name
+PARAMETERS	TagValue	InPlaceDemo
+PARAMETERS	InstanceType	t1.micro
+STACKS	2018-08-05T19:49:48.301Z	2018-08-07T21:11:14.790Z	This template creates the resources required for a sample AWS CodeDeploy blue/green deployment. **WARNING** This template creates one or more Amazon EC2 instances. You will be billed for the AWS resources created by this template.	False	arn:aws:cloudformation:us-west-2:226724366601:stack/CodeDeployBGStack-fizndpk/b5b0fd30-98e8-11e8-90c5-02cb67b6aa16	CodeDeployBGStack-fizndpk	DELETE_FAILED	The following resource(s) failed to delete: [BlueGreenLaunchConfiguration]. 
+CAPABILITIES	CAPABILITY_NAMED_IAM
+DRIFTINFORMATION	NOT_CHECKED
+OUTPUTS	ServiceRoleName	BlueGreenCodeDeployServiceRole-fizndpk
+OUTPUTS	LoadBalancerName	BlueGreenLoadBalancer-fizndpk
+OUTPUTS	ServiceRoleARN	arn:aws:iam::226724366601:role/BlueGreenCodeDeployServiceRole-fizndpk
+OUTPUTS	AutoScalingGroupName	CodeDeployBGStack-fizndpk-BlueGreenAutoScalingGroup-1O9DL9YNW3HLP
+PARAMETERS	ServiceRoleName	BlueGreenCodeDeployServiceRole-fizndpk
+PARAMETERS	LoadBalancerName	BlueGreenLoadBalancer-fizndpk
+PARAMETERS	KeyPairName	AWS Key Pair
+PARAMETERS	InstanceCount	3
+PARAMETERS	SSHLocation	0.0.0.0/0
