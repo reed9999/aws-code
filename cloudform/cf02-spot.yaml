@@ -1,0 +1,202 @@
+# Howebrewed CFn template to explore spot instances - adapted (eventually) from the following template.
+# https://github.com/awslabs/ec2-spot-labs/blob/master/ec2-spot-instance-launch-templates/ec2-spot-instance-launch-templates.yaml
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Example of launching an EC2 Spot Instance using EC2 Launch Templates
+Mappings:
+  CidrMappings:
+    public-subnet-1:
+      CIDR: 10.0.1.0/24
+    public-subnet-2:
+      CIDR: 10.0.2.0/24
+    vpc:
+      CIDR: 10.0.0.0/16
+  amazonLinuxAmi:
+    # Originally was c3.large for all of them.
+    # InstanceType isn't connected to the template below, just yet, and 
+    # is here only for reference for the moment.
+    Global:
+      searchTerms: Amazon Linux AMI 2017.09.1.20180115 x86_64 HVM GP2
+    us-east-1:
+      InstanceType: t2.small
+    us-east-2:
+      InstanceType: t2.small
+      AMI: ami-f63b1193
+    af-south-1:
+      # Cape Town does not have a matching AMI, so I picked one that seems sort of similar. 
+      # However this doesn't work, either because of the AIM or because the instance type isn't available, not 
+      # sure which.
+      InstanceType: t3.large
+      AMI: ami-0b4a93eff849f20ca
+Metadata:
+  Author:
+    Description: Chad Schmutzer <schmutze@amazon.com>
+  License:
+    Description: 'Copyright 2017 Amazon.com, Inc. and its affiliates. All Rights Reserved.
+
+      Licensed under the Amazon Software License (the "License"). You may not use this file
+      except in compliance with the License. A copy of the License is located at
+
+      http://aws.amazon.com/asl/
+
+      or in the "license" file accompanying this file. This file is distributed on an "AS IS"
+      BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+      License for the specific language governing permissions and limitations under the License.'
+Outputs:
+  launchTemplate:
+    Value:
+      Ref: launchTemplate
+Parameters:
+  keyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the EC2 Instances
+    Type: AWS::EC2::KeyPair::KeyName
+Resources:
+  vpc:
+    Properties:
+      CidrBlock:
+        Fn::FindInMap:
+        - CidrMappings
+        - vpc
+        - CIDR
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+    Type: AWS::EC2::VPC
+  internetGateway:
+    DependsOn:
+    - vpc
+    Type: AWS::EC2::InternetGateway
+  attachGateway:
+    DependsOn:
+    - vpc
+    - internetGateway
+    Properties:
+      InternetGatewayId:
+        Ref: internetGateway
+      VpcId:
+        Ref: vpc
+    Type: AWS::EC2::VPCGatewayAttachment
+  publicSubnet1:
+    DependsOn: attachGateway
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+        - 0
+        - Fn::GetAZs:
+            Ref: AWS::Region
+      CidrBlock:
+        Fn::FindInMap:
+        - CidrMappings
+        - public-subnet-1
+        - CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: Public Subnet 1
+      VpcId:
+        Ref: vpc
+    Type: AWS::EC2::Subnet
+  launchTemplate:
+    DependsOn:
+    - publicSubnet1
+    Properties:
+      LaunchTemplateData:
+        ImageId:
+          Fn::FindInMap:
+          - amazonLinuxAmi
+          - Ref: AWS::Region
+          - AMI
+        InstanceMarketOptions:
+          MarketType: spot
+        InstanceType: t2.small
+        # InstanceType: t3.large  # can be created manually as spot on af-south1
+        # InstanceType: c3.large
+        KeyName:
+          Ref: keyName
+        NetworkInterfaces:
+        - DeviceIndex: 0
+          SubnetId:
+            Ref: publicSubnet1
+        TagSpecifications:
+        - ResourceType: instance
+          Tags:
+          - Key: Name
+            Value: CFN EC2 Spot Instance
+    Type: AWS::EC2::LaunchTemplate
+  spotInstance:
+    DependsOn:
+    - launchTemplate
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId:
+          Ref: launchTemplate
+        Version: 1
+    Type: AWS::EC2::Instance
+
+# The remainder are demos of other VPC- and routing-related setup, not strictly 
+# necessary for our spot instance.
+  publicRouteTable:
+    DependsOn:
+    - vpc
+    - attachGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: Public Route Table
+      VpcId:
+        Ref: vpc
+    Type: AWS::EC2::RouteTable
+  publicRoute:
+    DependsOn:
+    - publicRouteTable
+    - internetGateway
+    - attachGateway
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: internetGateway
+      RouteTableId:
+        Ref: publicRouteTable
+    Type: AWS::EC2::Route
+  publicSubnet1RouteTableAssociation:
+    DependsOn:
+    - publicRouteTable
+    - publicSubnet1
+    - attachGateway
+    Properties:
+      RouteTableId:
+        Ref: publicRouteTable
+      SubnetId:
+        Ref: publicSubnet1
+    Type: AWS::EC2::SubnetRouteTableAssociation
+  publicSubnet2:
+    DependsOn: attachGateway
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+        - 1
+        - Fn::GetAZs:
+            Ref: AWS::Region
+      CidrBlock:
+        Fn::FindInMap:
+        - CidrMappings
+        - public-subnet-2
+        - CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: Public Subnet 2
+      VpcId:
+        Ref: vpc
+    Type: AWS::EC2::Subnet
+  publicSubnet2RouteTableAssociation:
+    DependsOn:
+    - publicRouteTable
+    - publicSubnet2
+    - attachGateway
+    Properties:
+      RouteTableId:
+        Ref: publicRouteTable
+      SubnetId:
+        Ref: publicSubnet2
+    Type: AWS::EC2::SubnetRouteTableAssociation
+

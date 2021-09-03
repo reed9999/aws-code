@@ -1,0 +1,1 @@
+arn:aws:cloudformation:us-east-2:226724366601:stack/Philip-simple-vpc-auto/bb6fffb0-7715-11eb-9d99-0600f1d4ce0c
